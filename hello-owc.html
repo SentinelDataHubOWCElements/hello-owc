@@ -9,6 +9,7 @@
     </style>
     <h2>Hello [[prop1]]!</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget ultrices quam, vel auctor magna. Ut in augue non mi commodo posuere eget eget quam. Nulla in aliquam diam. Mauris dapibus malesuada enim ac pretium. Morbi eleifend nulla ullamcorper rhoncus accumsan. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur facilisis, velit a sollicitudin molestie, felis est tempor eros, nec faucibus justo odio nec sem. <p>
+    <button on-click="handleClick">push</button>
   </template>
 
   <script>
@@ -24,15 +25,24 @@
       static get is() { return 'hello-owc'; }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'hello-owc'
+          ctx: {
+            type: Object,
+            value: {}
           }
         };
       }
       created(){
         console.warn("hello from owc component.");
+        
       }
+
+      handleClick() {
+        var dummy = document.createElement('hello-owc');
+        this.ctx.wm.pushComponent(dummy,"150px", "Test Title" );
+        console.log('this.ctx: ', this.ctx);
+      }
+
+
     }
 
     window.customElements.define(HelloOwc.is, HelloOwc);
