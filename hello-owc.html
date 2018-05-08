@@ -1,15 +1,29 @@
 <link rel="import" href="../polymer/polymer-element.html">
+ <link href="http://it.allfont.net/allfont.css?fonts=commodore-64-rounded" rel="stylesheet" type="text/css" />
+<!-- <script src="../owc-hello/gdal.js"></script> -->
 
 <dom-module id="hello-owc">
   <template>
     <style>
+      @import url(http://it.allfont.net/allfont.css?fonts=commodore-64-rounded);
       :host {
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+     <img style="display: inline-block;" width="100px" src="../owc-hello/processor.png" />
+     <h1 style="font-size: 20px;  font-family: 'Commodore 64 Rounded', arial; font-weight: bold; font-family:'Courier New'; margin-top: 15px;">WASM Data processing experiment</h1>
+
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget ultrices quam, vel auctor magna. Ut in augue non mi commodo posuere eget eget quam. Nulla in aliquam diam. Mauris dapibus malesuada enim ac pretium. Morbi eleifend nulla ullamcorper rhoncus accumsan. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur facilisis, velit a sollicitudin molestie, felis est tempor eros, nec faucibus justo odio nec sem. <p>
-    <button on-click="handleClick">push</button>
+    <h5>Fibonacci calculator</h5>
+    <input id="fibo-input" type="number" min="0"></input>
+    <button on-click="processClick">fibonacci</button>
+    <br/>
+    <br/>
+    <h5>GDAL test</h5>
+    <input type="file" id="geotiff-select"><button on-click="gdalClick">gdal</button>
+    <br/>
+    <br/>
+    <button on-click="handleClick">Push component</button>
   </template>
 
   <script>
@@ -23,23 +37,84 @@
      */
     class HelloOwc extends Polymer.Element {
       static get is() { return 'hello-owc'; }
-      static get properties() {
-        return {
-          ctx: {
-            type: Object,
-            value: {}
-          }
-        };
-      }
+
       created(){
         console.warn("hello from owc component.");
-        
+
+
+
+      }
+
+      processClick(){
+
+        let importObject = {};
+        var self = this;
+        var value = self.shadowRoot.querySelector("#fibo-input").value;
+
+        fetch('../owc-hello/fibo.wasm').then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results => {
+          alert("Fibonacci ["+ value +"]: " + results.instance.exports.fibo(value ));
+        });
+
       }
 
       handleClick() {
         var dummy = document.createElement('hello-owc');
-        this.ctx.wm.pushComponent(dummy,"150px", "Test Title" );
+        this._ctx.wm.pushComponent(dummy,"150px", "Test Title" );
         console.log('this.ctx: ', this.ctx);
+        this._ctx.mb.subscribe()
+      }
+
+      gdalClick(){
+
+        // const memory = new WebAssembly.Memory({ initial: 256, maximum: 256 });
+        // const importObj = {
+        //     env: {
+        //         abortStackOverflow: () => { throw new Error('overflow'); },
+        //         table: new WebAssembly.Table({ initial: 0, maximum: 0, element: 'anyfunc' }),
+        //         tableBase: 0,
+        //         memory: memory,
+        //         memoryBase: 1024,
+        //         STACKTOP: 0,
+        //         STACK_MAX: memory.buffer.byteLength,
+        //     }
+        // };
+        // fetch('../owc-hello/gdal.wasm').then((response) => response.arrayBuffer())
+        //     .then((bytes) => WebAssembly.instantiate(bytes, importObj))
+        //     .then((wa) => alert(wa.instance.exports._GDALOpen(40)));
+
+
+        // let importObject = {};
+        //
+        // fetch('../owc-hello/gdal.wasm').then(response =>
+        //   response.arrayBuffer()
+        // ).then(bytes =>
+        //   WebAssembly.instantiate(bytes, importObject)
+        // ).then(results => {
+        //   console.log(results.instance.exports._GDALOpen(40));
+        // });
+
+          console.log("hello from gdalClick!");
+
+          var self = this;
+          var tiffInspector = new Worker('../owc-hello/worker.js');
+
+         function inspectFiles() {
+              var files = self.shadowRoot.querySelector('#geotiff-select').files;
+              console.log("files: ", files);
+              tiffInspector.postMessage(files);
+         }
+
+          tiffInspector.onmessage = function(evt) {
+              console.warn("return");
+              console.log(evt.data);
+          };
+
+          inspectFiles() ;
+
       }
 
 

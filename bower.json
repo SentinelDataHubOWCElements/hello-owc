@@ -1,7 +1,7 @@
 {
-  "name": "hello-owc",
+  "name": "owc-hello",
   "description": "The first web component of OWC-2.0 project.",
-  "main": "hello-owc.html",
+  "main": "owc-hello.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0"
   },
