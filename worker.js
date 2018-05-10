@@ -1,6 +1,3 @@
-/*
- * Setup
- */
 var TIFFPATH = '/tiffs';
 
 var initialized = false;
@@ -19,24 +16,12 @@ var GDALOpen,
     CPLGetLastErrorType,
     CPLErrorReset;
 
-// Set up Module object for gdal.js to populate. Emscripten sets up its compiled
-// code to look for a Module object in the global scope. If found, it reads runtime
-// configuration from the existing object, and then further populates that object
-// with other helpful functionality (e.g. ccall() and cwrap(), which are used in
-// the onRuntimeInitialized callback, below).
+
 var Module = {
     'print': function(text) { console.log('stdout: ' + text); },
     'printErr': function(text) { console.log('stderr: ' + text); },
-    // Optimized builds contain a .js.mem file which is loaded asynchronously;
-    // this waits until that has finished before performing further setup.
     'onRuntimeInitialized': function() {
-        // Initialize GDAL
         Module.ccall('GDALAllRegister', null, [], []);
-
-        // Set up JS proxy functions
-        // Note that JS Number types are used to represent pointers, which means that
-        // any time we want to pass a pointer to an object, such as in GDALOpen, which in
-        // C returns a pointer to a GDALDataset, we need to use 'number'.
         GDALOpen = Module.cwrap('GDALOpen', 'number', ['string']);
         GDALClose = Module.cwrap('GDALClose', null, ['number']);
         CPLErrorReset = Module.cwrap('CPLErrorReset', null, []);
@@ -50,13 +35,9 @@ var Module = {
         GDALGetRasterXSize = Module.cwrap('GDALGetRasterXSize', 'number', ['number']);
         GDALGetRasterYSize = Module.cwrap('GDALGetRasterYSize', 'number', ['number']);
         GDALGetProjectionRef = Module.cwrap('GDALGetProjectionRef', 'string', ['number']);
-        // Returns an affine transform from geographic coordinate space to geographic coordinate space.
-        // Applying this transform to (0,0), (0, maxY), (maxX, maxY), and (maxX, 0) gives us the raster's
-        // georeferenced footprint. See http://www.gdal.org/gdal_datamodel.html
         GDALGetGeoTransform = Module.cwrap('GDALGetGeoTransform', 'number', ['number', 'number']);
 
         CPLSetErrorHandler(cplQuietFnPtr);
-        // Create a "directory" where user-selected files will be placed
         FS.mkdir(TIFFPATH);
         initialized = true;
     }

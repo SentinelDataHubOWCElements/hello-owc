@@ -65,37 +65,11 @@
         var dummy = document.createElement('hello-owc');
         this._ctx.wm.pushComponent(dummy,"150px", "Test Title" );
         console.log('this.ctx: ', this.ctx);
-        this._ctx.mb.subscribe()
+        
       }
 
       gdalClick(){
 
-        // const memory = new WebAssembly.Memory({ initial: 256, maximum: 256 });
-        // const importObj = {
-        //     env: {
-        //         abortStackOverflow: () => { throw new Error('overflow'); },
-        //         table: new WebAssembly.Table({ initial: 0, maximum: 0, element: 'anyfunc' }),
-        //         tableBase: 0,
-        //         memory: memory,
-        //         memoryBase: 1024,
-        //         STACKTOP: 0,
-        //         STACK_MAX: memory.buffer.byteLength,
-        //     }
-        // };
-        // fetch('../owc-hello/gdal.wasm').then((response) => response.arrayBuffer())
-        //     .then((bytes) => WebAssembly.instantiate(bytes, importObj))
-        //     .then((wa) => alert(wa.instance.exports._GDALOpen(40)));
-
-
-        // let importObject = {};
-        //
-        // fetch('../owc-hello/gdal.wasm').then(response =>
-        //   response.arrayBuffer()
-        // ).then(bytes =>
-        //   WebAssembly.instantiate(bytes, importObject)
-        // ).then(results => {
-        //   console.log(results.instance.exports._GDALOpen(40));
-        // });
 
           console.log("hello from gdalClick!");
 
