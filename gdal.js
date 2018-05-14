@@ -15,8 +15,8 @@ Module.expectedDataFileDownloads++;
         } else {
             throw "using preloaded data can only be done on a web page or in a web worker"
         }
-        var PACKAGE_NAME = "../owc-hello/gdal.data";
-        var REMOTE_PACKAGE_BASE = "../owc-hello/gdal.data";
+        var PACKAGE_NAME = "../../bower_components/owc-hello/gdal.data";
+        var REMOTE_PACKAGE_BASE = "../../bower_components/owc-hello/gdal.data";
         if (typeof Module["locateFilePackage"] === "function" && !Module["locateFile"]) {
             Module["locateFile"] = Module["locateFilePackage"];
             Module.printErr("warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)")
