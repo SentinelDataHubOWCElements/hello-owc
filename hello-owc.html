@@ -10,7 +10,7 @@
         display: block;
       }
     </style>
-     <img style="display: inline-block;" width="100px" src="../owc-hello/processor.png" />
+     <img style="display: inline-block;" width="100px" src="../../bower_components/owc-hello/processor.png" />
      <h1 style="font-size: 20px;  font-family: 'Commodore 64 Rounded', arial; font-weight: bold; font-family:'Courier New'; margin-top: 15px;">WASM Data processing experiment</h1>
 
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget ultrices quam, vel auctor magna. Ut in augue non mi commodo posuere eget eget quam. Nulla in aliquam diam. Mauris dapibus malesuada enim ac pretium. Morbi eleifend nulla ullamcorper rhoncus accumsan. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur facilisis, velit a sollicitudin molestie, felis est tempor eros, nec faucibus justo odio nec sem. <p>
@@ -51,7 +51,7 @@
         var self = this;
         var value = self.shadowRoot.querySelector("#fibo-input").value;
 
-        fetch('../owc-hello/fibo.wasm').then(response =>
+        fetch('../../bower_components/owc-hello/fibo.wasm').then(response =>
           response.arrayBuffer()
         ).then(bytes =>
           WebAssembly.instantiate(bytes, importObject)
@@ -74,7 +74,7 @@
           console.log("hello from gdalClick!");
 
           var self = this;
-          var tiffInspector = new Worker('../owc-hello/worker.js');
+          var tiffInspector = new Worker('../../bower_components/owc-hello/worker.js');
 
          function inspectFiles() {
               var files = self.shadowRoot.querySelector('#geotiff-select').files;

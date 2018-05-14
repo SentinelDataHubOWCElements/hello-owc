@@ -1392,7 +1392,7 @@ function integrateWasmJS() {
     var method = Module["wasmJSMethod"] || "native-wasm";
     Module["wasmJSMethod"] = method;
     var wasmTextFile = Module["wasmTextFile"] || "gdal.wast";
-    var wasmBinaryFile = Module["wasmBinaryFile"] || "../owc-hello/gdal.wasm";
+    var wasmBinaryFile = Module["wasmBinaryFile"] || "../../bower_components/owc-hello/gdal.wasm";
     var asmjsCodeFile = Module["asmjsCodeFile"] || "gdal.temp.asm.js";
     if (typeof Module["locateFile"] === "function") {
         wasmTextFile = Module["locateFile"](wasmTextFile);
