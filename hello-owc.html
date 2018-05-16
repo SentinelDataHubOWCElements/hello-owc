@@ -1,13 +1,29 @@
 <link rel="import" href="../polymer/polymer-element.html">
+ <link href="http://it.allfont.net/allfont.css?fonts=commodore-64-rounded" rel="stylesheet" type="text/css" />
+<!-- <script src="../owc-hello/gdal.js"></script> -->
 
 <dom-module id="hello-owc">
   <template>
     <style>
+      @import url(http://it.allfont.net/allfont.css?fonts=commodore-64-rounded);
       :host {
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+     <img style="display: inline-block;" width="100px" src="../../bower_components/owc-hello/processor.png" />
+     <h1 style="font-size: 20px;  font-family: 'Commodore 64 Rounded', arial; font-weight: bold; font-family:'Courier New'; margin-top: 15px;">WASM Data processing experiment</h1>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget ultrices quam, vel auctor magna. Ut in augue non mi commodo posuere eget eget quam. Nulla in aliquam diam. Mauris dapibus malesuada enim ac pretium. Morbi eleifend nulla ullamcorper rhoncus accumsan. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur facilisis, velit a sollicitudin molestie, felis est tempor eros, nec faucibus justo odio nec sem. <p>
+    <h5>Fibonacci calculator</h5>
+    <input id="fibo-input" type="number" min="0"></input>
+    <button on-click="processClick">fibonacci</button>
+    <br/>
+    <br/>
+    <h5>GDAL test</h5>
+    <input type="file" id="geotiff-select"><button on-click="gdalClick">gdal</button>
+    <br/>
+    <br/>
+    <button on-click="handleClick">Push component</button>
   </template>
 
   <script>
@@ -21,14 +37,61 @@
      */
     class HelloOwc extends Polymer.Element {
       static get is() { return 'hello-owc'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'hello-owc'
-          }
-        };
+
+      created(){
+        console.warn("hello from owc component.");
+
+
+
       }
+
+      processClick(){
+
+        let importObject = {};
+        var self = this;
+        var value = self.shadowRoot.querySelector("#fibo-input").value;
+
+        fetch('../../bower_components/owc-hello/fibo.wasm').then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results => {
+          alert("Fibonacci ["+ value +"]: " + results.instance.exports.fibo(value ));
+        });
+
+      }
+
+      handleClick() {
+        var dummy = document.createElement('hello-owc');
+        this._ctx.wm.pushComponent(dummy,"150px", "Test Title" );
+        console.log('this.ctx: ', this.ctx);
+        
+      }
+
+      gdalClick(){
+
+
+          console.log("hello from gdalClick!");
+
+          var self = this;
+          var tiffInspector = new Worker('../../bower_components/owc-hello/worker.js');
+
+         function inspectFiles() {
+              var files = self.shadowRoot.querySelector('#geotiff-select').files;
+              console.log("files: ", files);
+              tiffInspector.postMessage(files);
+         }
+
+          tiffInspector.onmessage = function(evt) {
+              console.warn("return");
+              console.log(evt.data);
+          };
+
+          inspectFiles() ;
+
+      }
+
+
     }
 
     window.customElements.define(HelloOwc.is, HelloOwc);

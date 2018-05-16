@@ -1,0 +1,50 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="hello-owc">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+     <h2>Hello [[prop1]]!</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget ultrices quam, vel auctor magna. Ut in augue non mi commodo posuere eget eget quam. Nulla in aliquam diam. Mauris dapibus malesuada enim ac pretium. Morbi eleifend nulla ullamcorper rhoncus accumsan. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur facilisis, velit a sollicitudin molestie, felis est tempor eros, nec faucibus justo odio nec sem. <p>
+    <button on-click="handleClick">push</button>
+  </template>
+
+  <script>
+    /**
+     * `hello-owc`
+     * The first web component of OWC-2.0 project.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class HelloOwc extends Polymer.Element {
+      static get is() { return 'hello-owc'; }
+      static get properties() {
+        return {
+          ctx: {
+            type: Object,
+            value: {}
+          }
+        };
+      }
+      created(){
+        console.warn("hello from owc component.");
+
+      }
+
+      handleClick() {
+        var dummy = document.createElement('hello-owc');
+        this._ctx.wm.pushComponent(dummy,"150px", "Test Title" );
+        console.log('this.ctx: ', this.ctx);
+      }
+
+
+    }
+
+    window.customElements.define(HelloOwc.is, HelloOwc);
+  </script>
+</dom-module>
